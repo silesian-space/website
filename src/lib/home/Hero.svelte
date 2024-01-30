@@ -30,6 +30,7 @@
 			font-family: 'Squada One', sans-serif;
 			font-size: 4em;
 			margin-bottom: 0.5rem;
+			color: #fff;
 		}
 
 		h2 {

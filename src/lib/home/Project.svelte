@@ -1,11 +1,23 @@
-<div class="content">
-	<h2>Who are we?</h2>
-	<p>
-		We are a team of amateur rocket engineers, programmers and technicians, that want to push the
-		boundaries of amateur rocketry and aviation under the Silesian flag.
-	</p>
+<script>
+	import Logo from '$lib/shared/Logo.svelte';
+	import HomeLink from './HomeLink.svelte';
+</script>
 
-	<a href="/about">Read more about us</a>
+<div class="content">
+	<div class="text-image">
+		<div class="text">
+			<h2>Who are we?</h2>
+			<p>
+				We are a team of amateur rocket engineers, programmers and technicians, that want to push
+				the boundaries of amateur rocketry and aviation under the Silesian flag.
+			</p>
+
+			<HomeLink href="/about" text="Learn more about us" />
+		</div>
+		<div class="image">
+			<Logo />
+		</div>
+	</div>
 </div>
 
 <style lang="scss">
@@ -30,8 +42,13 @@
 		}
 	}
 
-	a {
-		text-decoration: none;
+	p {
+		margin-bottom: 1rem;
+		font-size: 1.25rem;
+	}
+
+	.image {
+		width: 25rem;
 	}
 
 	.content {
@@ -39,6 +56,11 @@
 		max-width: min(80rem, calc(100vw - 2rem));
 		margin: 0 auto;
 		padding: 2rem;
+		align-items: center;
+	}
+
+	.text-image {
+		display: flex;
 		align-items: center;
 	}
 </style>
