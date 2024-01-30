@@ -15,13 +15,6 @@
 	</div>
 	<h1>silesian.space</h1>
 	<h2>A CanSat mission</h2>
-	<!-- <h3>Who we are?</h3>
-	<p>
-		We are a team of amateur rocket engineers, programmers and technicians, that want to push the
-		boundaries of amateur rocketry and aviation under the Silesian flag.
-	</p>
-
-	<a href="/about">Read more about us</a> -->
 </div>
 
 <style lang="scss">
@@ -43,6 +36,7 @@
 			text-transform: uppercase;
 			color: $primary;
 			font-weight: 300;
+			letter-spacing: 4px;
 		}
 
 		.logo {

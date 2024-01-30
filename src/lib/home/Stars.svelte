@@ -9,7 +9,6 @@
 		brightnessModifier: number;
 	}
 
-	import Smoke from '$lib/shared/Smoke.svelte';
 	import { onMount } from 'svelte';
 
 	let stars: Star[] = [];
@@ -17,10 +16,11 @@
 	let pointerY = 0;
 	let scrolled = 0;
 
-	const DISTANCE_TO_POINTER = 500;
-	const STAR_COUNT = 100;
+	let screenWidth = 0;
+
 	const STAR_SPEED = 0.005;
 	const EDGE_DIMMING = 100; // in px
+	const DISTANCE_TO_POINTER = 500; // in px
 
 	function createStar(): Star {
 		const x = Math.random() * window.innerWidth;
@@ -37,7 +37,9 @@
 	}
 
 	function createStars() {
-		for (let i = 0; i < 100; i++) {
+		stars = [];
+
+		for (let i = 0; i < window.innerWidth / 20; i++) {
 			stars.push(createStar());
 		}
 
@@ -64,7 +66,7 @@
 				star.brightnessModifier = 0;
 			}
 
-			const distanceToScreenEdge = window.innerHeight - star.y - scrolled;
+			const distanceToScreenEdge = window.innerHeight - star.y - star.yOffset;
 
 			// dim the star when it's close to the screen edge
 			if (distanceToScreenEdge < EDGE_DIMMING) {
@@ -92,6 +94,12 @@
 	}}
 	on:scroll={(e) => {
 		scrolled = window.scrollY;
+	}}
+/>
+
+<svelte:window
+	on:resize={() => {
+		createStars();
 	}}
 />
 
@@ -131,8 +139,8 @@
 		width: 5px;
 		height: 5px;
 		border-radius: 0.5rem;
-		/* background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%); */
-		background-color: white;
+		background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+		/* background-color: white; */
 		opacity: calc(var(--brightness) / 2 + var(--brightness-modifier) * 50%);
 		pointer-events: none;
 
