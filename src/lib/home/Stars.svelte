@@ -9,7 +9,7 @@
 		brightnessModifier: number;
 	}
 
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	let stars: Star[] = [];
 	let pointerX = 0;
@@ -19,8 +19,22 @@
 	let screenWidth = 0;
 
 	const STAR_SPEED = 0.005;
-	const EDGE_DIMMING = 100; // in px
+	const EDGE_DIMMING = 150; // in px
 	const DISTANCE_TO_POINTER = 500; // in px
+
+	let hyperdrive = false;
+	let hypedriveCurrentSpeed = 0.005;
+	let hypedriveTargetSpeed = 0.1;
+
+	let timer: number;
+
+	export function triggerHyperDrive() {
+		hyperdrive = true;
+
+		timer = setTimeout(() => {
+			hyperdrive = false;
+		}, 1000);
+	}
 
 	function createStar(): Star {
 		const x = Math.random() * window.innerWidth;
@@ -49,8 +63,18 @@
 	function loop() {
 		const frame = requestAnimationFrame(loop);
 
+		if (hyperdrive) {
+			hypedriveCurrentSpeed += (hypedriveTargetSpeed - hypedriveCurrentSpeed) * 0.01;
+		} else {
+			hypedriveCurrentSpeed += (0.005 - hypedriveCurrentSpeed) * 0.01;
+		}
+
 		stars = stars.map((star) => {
-			star.y += star.brightness * STAR_SPEED;
+			if (hyperdrive) {
+				star.y += star.brightness * hypedriveTargetSpeed;
+			} else {
+				star.y += star.brightness * STAR_SPEED;
+			}
 
 			if (star.y > window.innerHeight) {
 				star.y = 0;
@@ -60,17 +84,22 @@
 				Math.pow(pointerX - star.x, 2) + Math.pow(pointerY + scrolled - (star.y + star.yOffset), 2)
 			);
 
-			if (distanceToPointer < DISTANCE_TO_POINTER) {
+			if (hyperdrive) {
+				// star.brightnessModifier = 1;
+			} else if (distanceToPointer < DISTANCE_TO_POINTER) {
 				star.brightnessModifier = 1 - distanceToPointer / DISTANCE_TO_POINTER;
 			} else {
 				star.brightnessModifier = 0;
 			}
 
 			const distanceToScreenEdge = window.innerHeight - star.y - star.yOffset;
+			const ditsanceToScreenTop = star.y + star.yOffset;
 
 			// dim the star when it's close to the screen edge
 			if (distanceToScreenEdge < EDGE_DIMMING) {
 				star.brightnessModifier = (1 - distanceToScreenEdge / EDGE_DIMMING) * -1;
+			} else if (ditsanceToScreenTop < EDGE_DIMMING) {
+				star.brightnessModifier = (1 - ditsanceToScreenTop / EDGE_DIMMING) * -1;
 			}
 
 			star.yOffset = scrolled * (130 - star.brightness) * 0.01 * 0.75;
@@ -84,6 +113,11 @@
 	onMount(() => {
 		createStars();
 		loop();
+	});
+
+	onDestroy(() => {
+		cancelAnimationFrame(timer);
+		clearTimeout(timer);
 	});
 </script>
 
@@ -108,6 +142,7 @@
 		{#each stars as star}
 			<div
 				class="star"
+				class:hyperdrive
 				style="
         left: {star.x}px;
         top: {star.y + star.yOffset}px;
@@ -122,7 +157,7 @@
 	<!-- <Smoke /> -->
 </div>
 
-<style>
+<style lang="scss">
 	.stars {
 		position: absolute;
 		top: 0;
@@ -139,13 +174,19 @@
 		width: 5px;
 		height: 5px;
 		border-radius: 0.5rem;
-		background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+		background: white;
+		// background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
 		/* background-color: white; */
 		opacity: calc(var(--brightness) / 2 + var(--brightness-modifier) * 50%);
 		pointer-events: none;
 
 		animation: appear 1s ease-in-out;
-		animation-delay: calc(var(--brightness) * 2s);
+
+		transition: 0.35s height;
+
+		&.hyperdrive {
+			height: 80px;
+		}
 	}
 
 	.overlay {
