@@ -1,2 +1,9 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+	import Hero from '$lib/home/Hero.svelte';
+	import Project from '$lib/home/Project.svelte';
+	import '../scss/global.scss';
+	import '../scss/vars.scss';
+</script>
+
+<Hero />
+<Project />
