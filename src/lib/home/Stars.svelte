@@ -19,12 +19,12 @@
 	let screenWidth = 0;
 
 	const STAR_SPEED = 0.005;
-	const EDGE_DIMMING = 150; // in px
+	const EDGE_DIMMING_PERCENT = 10; // in screen height %
 	const DISTANCE_TO_POINTER = 500; // in px
 
 	let hyperdrive = false;
-	let hypedriveCurrentSpeed = 0.005;
 	let hypedriveTargetSpeed = 0.1;
+	let edgeDimmingTreshold = 0;
 
 	let timer: number;
 
@@ -36,6 +36,8 @@
 		}, 1000);
 	}
 
+	const brightnesses = [25, 50, 100];
+
 	function createStar(): Star {
 		const x = Math.random() * window.innerWidth;
 
@@ -45,12 +47,14 @@
 			startedAt: x,
 			yOffset: Math.random() * 100,
 			toTravel: Math.random() * 100,
-			brightness: Math.random() * 100,
+			// brightness: Math.random() * 100,
+			brightness: brightnesses[Math.floor(Math.random() * brightnesses.length)],
 			brightnessModifier: 0
 		};
 	}
 
 	function createStars() {
+		edgeDimmingTreshold = window.innerHeight * (EDGE_DIMMING_PERCENT / 100);
 		stars = [];
 
 		for (let i = 0; i < window.innerWidth / 20; i++) {
@@ -63,12 +67,6 @@
 	function loop() {
 		const frame = requestAnimationFrame(loop);
 
-		if (hyperdrive) {
-			hypedriveCurrentSpeed += (hypedriveTargetSpeed - hypedriveCurrentSpeed) * 0.01;
-		} else {
-			hypedriveCurrentSpeed += (0.005 - hypedriveCurrentSpeed) * 0.01;
-		}
-
 		stars = stars.map((star) => {
 			if (hyperdrive) {
 				star.y += star.brightness * hypedriveTargetSpeed;
@@ -76,6 +74,7 @@
 				star.y += star.brightness * STAR_SPEED;
 			}
 
+			console.log(star.y, window.innerHeight);
 			if (star.y > window.innerHeight) {
 				star.y = 0;
 			}
@@ -85,7 +84,7 @@
 			);
 
 			if (hyperdrive) {
-				// star.brightnessModifier = 1;
+				star.brightnessModifier = 0;
 			} else if (distanceToPointer < DISTANCE_TO_POINTER) {
 				star.brightnessModifier = 1 - distanceToPointer / DISTANCE_TO_POINTER;
 			} else {
@@ -96,10 +95,12 @@
 			const ditsanceToScreenTop = star.y + star.yOffset;
 
 			// dim the star when it's close to the screen edge
-			if (distanceToScreenEdge < EDGE_DIMMING) {
-				star.brightnessModifier = (1 - distanceToScreenEdge / EDGE_DIMMING) * -1;
-			} else if (ditsanceToScreenTop < EDGE_DIMMING) {
-				star.brightnessModifier = (1 - ditsanceToScreenTop / EDGE_DIMMING) * -1;
+			if (distanceToScreenEdge < edgeDimmingTreshold) {
+				star.brightnessModifier +=
+					(1 - distanceToScreenEdge / edgeDimmingTreshold) * -1 * (1 + star.brightnessModifier);
+			} else if (ditsanceToScreenTop < edgeDimmingTreshold) {
+				star.brightnessModifier +=
+					(1 - ditsanceToScreenTop / edgeDimmingTreshold) * -1 * (1 + star.brightnessModifier);
 			}
 
 			star.yOffset = scrolled * (130 - star.brightness) * 0.01 * 0.75;
@@ -116,7 +117,6 @@
 	});
 
 	onDestroy(() => {
-		cancelAnimationFrame(timer);
 		clearTimeout(timer);
 	});
 </script>
@@ -145,7 +145,7 @@
 				class:hyperdrive
 				style="
         left: {star.x}px;
-        top: {star.y + star.yOffset}px;
+        top: {star.y + scrolled * (130 - star.brightness) * 0.01 * 0.75}px;
         --brightness: {star.brightness}%;
         --brightness-modifier: {star.brightnessModifier};
       "

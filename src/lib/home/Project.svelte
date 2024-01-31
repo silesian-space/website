@@ -15,7 +15,7 @@
 			<HomeLink href="/about" text="Learn more about us" />
 		</div>
 		<div class="image">
-			<Logo />
+			<img src="/images/eagle.png" alt="Silesian eagle" />
 		</div>
 	</div>
 </div>
@@ -48,14 +48,20 @@
 	}
 
 	.image {
-		width: 25rem;
+		margin-left: 5rem;
+		width: 15rem;
+
+		img {
+			object-fit: contain;
+			width: 100%;
+		}
 	}
 
 	.content {
 		min-height: 100dvh;
 		max-width: min(80rem, calc(100vw - 2rem));
 		margin: 0 auto;
-		padding: 2rem;
+		padding: 4rem 2rem;
 		align-items: center;
 	}
 

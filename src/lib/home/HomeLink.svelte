@@ -20,6 +20,7 @@
 		transition: 0.25s;
 		display: flex;
 		align-items: center;
+		width: fit-content;
 
 		&:hover {
 			color: $secondary;
@@ -28,10 +29,6 @@
 				transform: translateX(0);
 				opacity: 1;
 			}
-		}
-
-		svg {
-			margin-left: 0.5rem;
 		}
 
 		.icon {
