@@ -103,7 +103,7 @@
 					(1 - ditsanceToScreenTop / edgeDimmingTreshold) * -1 * (1 + star.brightnessModifier);
 			}
 
-			star.yOffset = scrolled * (130 - star.brightness) * 0.01 * 0.75;
+			star.yOffset = window.scrollY * ((130 - star.brightness) * 0.01 * 0.5 - 0.15);
 
 			return star;
 		});
@@ -126,9 +126,6 @@
 		pointerX = e.clientX;
 		pointerY = e.clientY;
 	}}
-	on:scroll={(e) => {
-		scrolled = window.scrollY;
-	}}
 />
 
 <svelte:window
@@ -145,7 +142,7 @@
 				class:hyperdrive
 				style="
         left: {star.x}px;
-        top: {star.y + scrolled * (130 - star.brightness) * 0.01 * 0.75}px;
+        top: {star.y + window.scrollY * ((130 - star.brightness) * 0.01 * 0.5 - 0.15)}px;
         --brightness: {star.brightness}%;
         --brightness-modifier: {star.brightnessModifier};
       "

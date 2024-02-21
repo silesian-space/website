@@ -1,15 +1,22 @@
 <script>
 	import HomeLink from '$lib/home/HomeLink.svelte';
+	import PageHeading from '$lib/shared/PageHeading.svelte';
+	import PageSubtitle from '$lib/shared/PageSubtitle.svelte';
 	import Team from './Team.svelte';
 	import '/src/scss/global.scss';
 	import '/src/scss/vars.scss';
 </script>
 
 <div class="content">
-	<h1>About us</h1>
-
+	<PageHeading
+		title="About us"
+		backButton={{
+			href: '/',
+			text: 'Back to home'
+		}}
+	/>
 	<!-- daka cool tymova fotka -->
-	<h2>Our story</h2>
+	<PageSubtitle>Our story</PageSubtitle>
 	<p>
 		Our three founding fathers came with this idea of creating Silesian amateur rocketry club in
 		2022. The idea was to create a community of people who are interested in rocketry and space

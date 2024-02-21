@@ -31,6 +31,10 @@
 			}
 		}
 
+		&:active {
+			transform: scale(0.95);
+		}
+
 		.icon {
 			display: flex;
 			align-items: center;
