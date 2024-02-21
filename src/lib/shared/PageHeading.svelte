@@ -26,6 +26,7 @@
 	h1 {
 		background: linear-gradient(90deg, $primary 0%, $secondary 100%);
 		width: fit-content;
+		background-clip: text;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		margin: 0 auto;

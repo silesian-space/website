@@ -186,15 +186,6 @@
 		}
 	}
 
-	.overlay {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		height: 15vh;
-		background: linear-gradient(#12121200, #121212);
-		width: 100%;
-	}
-
 	@keyframes appear {
 		from {
 			opacity: 0;
