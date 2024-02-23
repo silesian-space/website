@@ -27,8 +27,11 @@
 	let offsetY = 0;
 	let offsetX = 0;
 	let image: HTMLImageElement | null = null;
+	let ring: HTMLDivElement | null = null;
 
 	const easing = (t: number) => t * (2 - t);
+
+	import { gsap } from 'gsap';
 
 	const onMouseMove = (e: MouseEvent) => {
 		if (!image) return;
@@ -42,7 +45,7 @@
 		const relativeMouseX = clientX - imageCenterPosX;
 		const relativeMouseY = clientY - imageCenterPosY;
 
-		const DISTANCE_TO_POINTER = 100;
+		const DISTANCE_TO_POINTER = 300;
 
 		// make offset maximum of 20px with nice easing at the end
 		const maxOffset = 5;
@@ -50,10 +53,15 @@
 			1,
 			Math.sqrt(Math.pow(relativeMouseX, 2) + Math.pow(relativeMouseY, 2)) / DISTANCE_TO_POINTER
 		);
+
 		const offset = maxOffset * easing(t);
 
-		offsetX = (relativeMouseX / boundingRect.width) * offset;
-		offsetY = (relativeMouseY / boundingRect.height) * offset;
+		gsap.to(ring, {
+			x: (relativeMouseX / boundingRect.width) * offset,
+			y: (relativeMouseY / boundingRect.height) * offset,
+			duration: 0.3,
+			ease: 'power2.out'
+		});
 	};
 </script>
 
@@ -63,7 +71,7 @@
 	<div class="member-img">
 		<img src={member.photo} alt={member.name} bind:this={image} />
 
-		<div class="image-effect" style="--left: {offsetX}; --top: {offsetY}">
+		<div class="image-effect" style="--left: {offsetX}; --top: {offsetY}" bind:this={ring}>
 			<ImageEffect />
 		</div>
 	</div>
