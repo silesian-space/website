@@ -23,7 +23,7 @@
 	const DISTANCE_TO_POINTER = 500; // in px
 
 	let hyperdrive = false;
-	let hypedriveTargetSpeed = 0.1;
+	let hypedriveTargetSpeed = 0.15;
 	let edgeDimmingTreshold = 0;
 
 	let timer: number;

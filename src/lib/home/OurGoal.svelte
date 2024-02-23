@@ -20,7 +20,7 @@
 				trigger: '#our-goal',
 				start: 'top bottom-=100px',
 				end: 'bottom center',
-				scrub: 1
+				scrub: 2
 			},
 			motionPath: {
 				path: '#rocket-path',
@@ -62,6 +62,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		margin-right: 2rem;
 
 		:global(.rocket-path) {
 			width: 100%;
