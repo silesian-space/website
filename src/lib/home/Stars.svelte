@@ -74,7 +74,6 @@
 				star.y += star.brightness * STAR_SPEED;
 			}
 
-			console.log(star.y, window.innerHeight);
 			if (star.y > window.innerHeight) {
 				star.y = 0;
 			}
